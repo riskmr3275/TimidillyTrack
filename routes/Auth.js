@@ -1,28 +1,22 @@
-// const express = require("express");
-// const router = express.Router();
-
- 
-
-// // Import controllers
-// const {
-//   login,
-// } = require("../controllers/Auth");
-
-// // Routes
-// router.post("/login", login); // Login route (auth can be added if required)
-
- 
-   
-// module.exports = router;
 
 const express = require("express");
 const router = express.Router();
-
+const {auth,verifyOtp}=require("../middlewares/auth");    
 // Import controllers
-const { login } = require("../controllers/Auth");
+const { login,deleteAccount,updateProfile,sendOtp,signup } = require("../controllers/Auth");
+const { changePassword,resetPasswordToken,resetPassword } = require("../controllers/Password");
 
 // Routes
-router.post("/login", login);
+router.post("/login", login);//done
+router.post("/signup", verifyOtp,signup);//done
+router.post("/sendotp", sendOtp);                                    // User login
+router.post("/deleteAccount", auth, deleteAccount);             // Delete user profile
+router.post("/updateProfile", auth, updateProfile);             // Update user profile
+  
+
+router.post("/changepassword", auth, changePassword);           // Change password with current password
+router.post("/reset-password-token", resetPasswordToken);       // Generate a reset password token
+ router.post("/reset-password", resetPassword);
 
 // Export the router instance
 module.exports = router;  // This line ensures that the router object is exported correctly

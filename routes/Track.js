@@ -30,13 +30,19 @@ const router = express.Router();
 const { auth } = require("../middlewares/auth");
 
 // Import controllers
-const { getPendingStatus, startOrder, completedOrder, progressOrder } = require("../controllers/Track");
+const { getPendingStatus, startOrder, completedOrder, progressOrder,getOrderById,deleteOrder } = require("../controllers/Track");
 
-// Routes
-router.post("/pending", auth, getPendingStatus); // Check pending status
-router.post("/start", auth, startOrder); // Start a new order
-router.post("/completed", auth, completedOrder); // Check if order is completed
-router.post("/progress", auth, progressOrder); // Check order progress
+ 
+
+   
+// Order Routes
+router.post("/pending", auth, getPendingStatus);                
+router.post("/start", auth, startOrder);       
+router.post("/completed", auth, completedOrder);  
+router.post("/getOrder", auth, getOrderById);                  
+router.post("/deleteOrder", auth, deleteOrder); 
+router.post("/progressOrder", auth, progressOrder); 
+
 
 // Export the router instance
 module.exports = router;  // This line ensures that the router object is exported correctly
