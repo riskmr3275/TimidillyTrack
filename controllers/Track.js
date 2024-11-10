@@ -265,7 +265,7 @@ exports.getOrderById = async (req, res) => {
         // Fetch the order details along with status by order_id
         const { data: orderDetails, error: orderError } = await supabase
             .from('orders')
-            .select('*, order_status(status, updated_at)')
+            .select('*, order_status(status,message, updated_at)')
             .eq('order_id', orderId)
             .single(); // Assuming order_id is unique, so we use .single()
 

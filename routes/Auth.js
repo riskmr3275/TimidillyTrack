@@ -8,7 +8,7 @@ const { changePassword,resetPasswordToken,resetPassword } = require("../controll
 
 // Routes
 router.post("/login", login);//done
-router.post("/signup", verifyOtp,signup);//done
+router.post("/signup",signup);//done
 router.post("/sendotp", sendOtp);                                    // User login
 router.post("/deleteAccount", auth, deleteAccount);             // Delete user profile
 router.post("/updateProfile", auth, updateProfile);             // Update user profile

@@ -210,7 +210,7 @@ exports.signup = async (req, res) => {
         return res.status(201).json({
             success: true,
             message: "User registered successfully",
-            userId: newUser.user_id // Assuming 'id' is the column for user ID
+             // Assuming 'id' is the column for user ID
         });
 
     } catch (error) {

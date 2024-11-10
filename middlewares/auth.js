@@ -5,10 +5,10 @@ const { connect } = require('../config/database'); // Adjust path as needed
 
 // auth middleware
 exports.auth = async (req, res, next) => {
-    try {
+    try {   
 
      
-        
+         
         // Extract Token from Cookies, Body, or Headers
         const token = req.cookies.token || req.body.token || req.header("authorization")?.replace("Bearer ", "");
         console.log("Token received in auth:", token);
