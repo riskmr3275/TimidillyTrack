@@ -4,6 +4,55 @@ const { connect } = require('../config/database');
 const mailSender = require("../utils/mailSender");
 const otpGenerate = require("otp-generator");
 
+
+
+exports.checkEmail = async (req, res) => {
+    try {
+        const { email } = req.body;
+        console.log("Received email:", email);
+        if(!email){
+            return res.status(400).json({
+                success: false,
+                message: "Email is required"
+            });
+        }
+        // Step 1: Connect to Supabase
+        const supabase = await connect(); // Using the existing connect function to get the Supabase client
+        let query;
+        let queryParams = [];
+        query = supabase.from('users').select('*').eq('email', email);
+        const { data, error } = await query;
+        if (error) {
+            return res.status(500).json({
+                success: false,
+                message: error.message
+            });
+        }
+        if (data.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "Email not found"
+            });
+        }
+        return res.status(200).json({
+            success: true,
+            message: "Email found",
+            data
+        });
+
+    } catch (error) {
+        console.log("Error checking email:", error);
+        res.status(500).json({
+            success: false,
+            message: error.message
+        })
+        
+    }
+}
+
+
+
+
 exports.login = async (req, res) => {
     try {
         const { credential, password } = req.body;
@@ -133,7 +182,8 @@ exports.login = async (req, res) => {
             console.error("Error comparing password:", err);
             return res.status(500).json({
                 success: false,
-                message: "Error during password verification."
+                message: "Error during password verification.",   
+                error:err.message   
             });
         }
 

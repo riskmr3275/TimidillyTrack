@@ -3,12 +3,18 @@ const express = require("express");
 const router = express.Router();
 const {auth,verifyOtp}=require("../middlewares/auth");    
 // Import controllers
-const { login,deleteAccount,updateProfile,sendOtp,signup } = require("../controllers/Auth");
+const { login,deleteAccount,updateProfile,sendOtp,signup,checkEmail } = require("../controllers/Auth");
 const { changePassword,resetPasswordToken,resetPassword } = require("../controllers/Password");
 
 // Routes
 router.post("/login", login);//done
 router.post("/signup",signup);//done
+  
+ 
+
+router.post('/check-email', checkEmail);
+   
+ 
 router.post("/sendotp", sendOtp);                                    // User login
 router.post("/deleteAccount", auth, deleteAccount);             // Delete user profile
 router.post("/updateProfile", auth, updateProfile);             // Update user profile
