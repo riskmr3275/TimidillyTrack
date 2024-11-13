@@ -4,7 +4,7 @@ const database = require("./config/database");
 const userRoutes = require("./routes/Auth");
 const trackRoutes = require("./routes/Track");
 const orderRoutes = require("./routes/Order");
-const {sendInteractiveMessage} =require("./whatsapp/sendInteractiveMessage ")
+const { sendInteractiveMessage } = require("./whatsapp/sendInteractiveMessage ");
 require('dotenv').config();
 const fileUpload = require("express-fileupload");
 const cors = require("cors");
@@ -66,9 +66,26 @@ app.post('/api/v1/send-whatsapp-template', async (req, res) => {
     }
 });
 
+// Webhook for WhatsApp API to handle incoming messages
+app.get('/webhook', (req, res) => {
+    const mode = req.query['hub.mode'];
+    const token = req.query['hub.verify_token'];
+    const challenge = req.query['hub.challenge'];
 
+    // If the mode and token are correct, return the challenge to verify the webhook
+    if (mode && token) {
+        if (mode === 'subscribe' && token === process.env.VERIFY_TOKEN) {
+            console.log('Webhook verified successfully!');
+            res.status(200).send(challenge);  // Send the challenge back to verify
+        } else {
+            res.sendStatus(403);  // Forbidden if token doesn't match
+        }
+    } else {
+        res.sendStatus(400);  // Bad Request if parameters are missing
+    }
+});
 
-
+// Webhook endpoint to handle WhatsApp Business API messages
 app.post('/webhook', async (req, res) => {
     const { object, entry } = req.body;
 
@@ -101,10 +118,11 @@ app.post('/webhook', async (req, res) => {
     }
 });
 
-app.get('/',async (req,res)=>{
-    res.send("Hello World"+"Server Is Running123 ")
-})
+// Simple route to check if the server is running
+app.get('/', async (req, res) => {
+    res.send("Hello World! Server is running.");
+});
+
 // Start the server
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-   
